@@ -18,8 +18,9 @@ int main(void)
         DrawText("Hello World!", 16, 9, 20, RED);
         EndDrawing();
         DrawCircle(640, 360, 100, GREEN);
-       //Find out how to put Vectors as a parameter
-       DrawTriangle((20, 360), (30, 370), (20,380), DARKBLUE);
+       
+        //Find out how to put Vectors as a parameter
+        DrawTriangleFan((20.0, 360.0), (30.0, 370.0), (20.0,380.0), DARKBLUE);
     }
 
     CloseWindow();
