@@ -15,12 +15,17 @@ int main(void)
     {
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        DrawText("Hello World!", 16, 9, 20, RED);
+        DrawText("Hello World!", 16, 9, 16, RED);
         EndDrawing();
+        Vector2 mousePosition= GetMousePosition();
         DrawCircle(640, 360, 100, GREEN);
-       Vector2 v1 = ((100, 360), (125,370))
-        //Find out how to put Vectors as a parameter
-        DrawTriangleFan(, , DARKBLUE);
+        DrawCircleV(mousePosition, 5, DARKBLUE);
+        DrawTriangleLines(mousePosition, {40,370}, {40, 350}, BLUE);
+        CheckCollisionCircles(mousePosition, 5, { 640, 360 }, 100);
+        while (true)
+        {
+
+        }
     }
 
     CloseWindow();
