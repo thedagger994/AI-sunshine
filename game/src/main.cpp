@@ -140,7 +140,32 @@ private:
         case CREDITS_SCREEN:
             DrawText("Credits Screen", 10, 10, 20, PINK);
             break;
+        case GAME_SCREEN:
+            DrawText("Game Screen", 10, 10, 20, BLUE);
+            DrawRectangleRec(player, WHITE);
+            DrawRectangleRec(obstacle, RED);
+            break;
 
+        case PAUSE_SCREEN:
+            DrawText("Pause Screen", 10, 10, 20, GRAY);
+            DrawText("Game Paused", GetScreenWidth() / 2 - MeasureText("Game Paused", 40) / 2, GetScreenHeight() / 2 - 40, 40, DARKGRAY);
+            break;
+
+        case WIN_SCREEN:
+            DrawText("Win Screen", 10, 10, 20, GREEN);
+            break;
+
+        case LOSE_SCREEN:
+            DrawText("Lose Screen", 10, 10, 20, RED);
+            break;
         }
+
+        EndDrawing();
     }
+};
+
+int main() {
+    Game::GetInstance().Run();
+
+    return 0;
 }
