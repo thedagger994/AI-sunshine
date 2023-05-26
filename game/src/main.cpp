@@ -1,31 +1,59 @@
 #include "raylib.h"
+#include <imgui.h>
+#include <oleidl.h>
 
-typedef enum {
-    TITLE_SCREEN,
-    MAIN_MENU,
-    CREDITS_SCREEN,
-    GAME_SCREEN,
-    PAUSE_SCREEN,
-    WIN_SCREEN,
-    LOSE_SCREEN
-} GameState;
+class Game {
+public:
+    static Game& GetInstance() {
+        static Game instance;
+        return instance;
+    }
 
-int main() {
-    const int screenWidth = 800;
-    const int screenHeight = 450;
+    void Run() {
+        const int screenWidth = 800;
+        const int screenHeight = 450;
 
-    InitWindow(screenWidth, screenHeight, "State Machine Example");
+        InitWindow(screenWidth, screenHeight, "State Machine Example");
 
-    GameState currentState = TITLE_SCREEN;
-    float stateTimer = 0.0f;
-    bool gamePaused = false;
+        currentState = TITLE_SCREEN;
+        stateTimer = 0.0f;
+        gamePaused = false;
 
-    Rectangle player = { screenWidth / 2 - 25, screenHeight / 2 - 25, 50, 50 };
-    Rectangle obstacle = { screenWidth / 2 + 100, screenHeight / 2 - 25, 50, 50 };
+        SetTargetFPS(60);
 
-    SetTargetFPS(60);
+        while (!WindowShouldClose()) {
+            Update();
+            Draw();
+        }
 
-    while (!WindowShouldClose()) {
+        CloseWindow();
+    }
+
+private:
+    enum GameState {
+        TITLE_SCREEN,
+        MAIN_MENU,
+        CREDITS_SCREEN,
+        GAME_SCREEN,
+        PAUSE_SCREEN,
+        WIN_SCREEN,
+        LOSE_SCREEN
+    };
+
+    GameState currentState;
+    float stateTimer;
+    bool gamePaused;
+
+    Rectangle player;
+    Rectangle obstacle;
+
+    Game() {
+    }
+
+    Game(const Game&) = delete;
+    Game& operator=(const Game&) = delete;
+
+    void Update() {
         float deltaTime = GetFrameTime();
 
         switch (currentState) {
@@ -82,60 +110,6 @@ int main() {
                 gamePaused = false;
             }
             break;
-
-        case WIN_SCREEN:
-            if (IsKeyPressed(KEY_SPACE)) {
-                currentState = MAIN_MENU;
-            }
-            break;
-
-        case LOSE_SCREEN:
-            if (IsKeyPressed(KEY_SPACE)) {
-                currentState = MAIN_MENU;
-            }
-            break;
         }
-
-        BeginDrawing();
-        ClearBackground(RAYWHITE);
-
-        switch (currentState) {
-        case TITLE_SCREEN:
-            DrawText("Title Screen", 10, 10, 20, YELLOW);
-            break;
-
-        case MAIN_MENU:
-            DrawText("Main Menu", 10, 10, 20, PURPLE);
-            break;
-
-        case CREDITS_SCREEN:
-            DrawText("Credits Screen", 10, 10, 20, PINK);
-            break;
-
-        case GAME_SCREEN:
-            DrawText("Game Screen", 10, 10, 20, BLUE);
-            DrawRectangleRec(player, WHITE);
-            DrawRectangleRec(obstacle, RED);
-            break;
-
-        case PAUSE_SCREEN:
-            DrawText("Pause Screen", 10, 10, 20, GRAY);
-            DrawText("Game Paused", screenWidth / 2 - MeasureText("Game Paused", 40) / 2, screenHeight / 2 - 40, 40, DARKGRAY);
-            break;
-
-        case WIN_SCREEN:
-            DrawText("Win Screen", 10, 10, 20, GREEN);
-            break;
-
-        case LOSE_SCREEN:
-            DrawText("Lose Screen", 10, 10, 20, RED);
-            break;
-        }
-
-        EndDrawing();
     }
-
-    CloseWindow();
-
-    return 0;
 }
