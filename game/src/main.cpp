@@ -16,19 +16,16 @@ int main() {
 
     InitWindow(screenWidth, screenHeight, "State Machine Example");
 
-    // Initialize game state
     GameState currentState = TITLE_SCREEN;
     float stateTimer = 0.0f;
     bool gamePaused = false;
 
-    // Game objects
     Rectangle player = { screenWidth / 2 - 25, screenHeight / 2 - 25, 50, 50 };
     Rectangle obstacle = { screenWidth / 2 + 100, screenHeight / 2 - 25, 50, 50 };
 
     SetTargetFPS(60);
 
     while (!WindowShouldClose()) {
-        // Update
         float deltaTime = GetFrameTime();
 
         switch (currentState) {
@@ -57,13 +54,11 @@ int main() {
 
         case GAME_SCREEN:
             if (!gamePaused) {
-                // Game logic
                 if (IsKeyDown(KEY_W)) player.y -= 200 * deltaTime;
                 if (IsKeyDown(KEY_S)) player.y += 200 * deltaTime;
                 if (IsKeyDown(KEY_A)) player.x -= 200 * deltaTime;
                 if (IsKeyDown(KEY_D)) player.x += 200 * deltaTime;
 
-                // Collision check
                 if (CheckCollisionRecs(player, obstacle)) {
                     currentState = LOSE_SCREEN;
                 }
@@ -101,7 +96,6 @@ int main() {
             break;
         }
 
-        // Draw
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
