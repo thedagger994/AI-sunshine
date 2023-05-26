@@ -1,56 +1,147 @@
-#include "rlImGui.h"
-#include <corecrt_math.h>
-#define SCREEN_WIDTH 1280
-#define SCREEN_HEIGHT 720
+#include "raylib.h"
 
-struct Circle {
-    float x;
-    float y;
-    float radius;
-    Color color;
-};
+typedef enum {
+    TITLE_SCREEN,
+    MAIN_MENU,
+    CREDITS_SCREEN,
+    GAME_SCREEN,
+    PAUSE_SCREEN,
+    WIN_SCREEN,
+    LOSE_SCREEN
+} GameState;
 
-void DrawCircle(int centerX, int centerY, float radius, Color color);
-
-void DrawTriangle(Vector2 v1, Vector2 v2, Vector2 v3, Color color);
-
-int main(void)
-{
-    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Sunshine");
-    SetTargetFPS(60);
-
+int main() {
     const int screenWidth = 800;
     const int screenHeight = 450;
 
-    int mousePositionX = GetMouseX();
-    int mousePositionY = GetMouseY();
-   
-    Circle circle1 = {640, 360, 100, GREEN };
-    Circle circle2 = { mousePositionX, mousePositionY, 50, DARKBLUE };
-    
-    bool checkCircleCollision(const Circle & circle1, const Circle & circle2); {
-        float distance = sqrt(pow(circle2.x - circle1.x, 2) + pow(circle2.y - circle1.y, 2));
-        return distance <= circle1.radius + circle2.radius;
-    }
+    InitWindow(screenWidth, screenHeight, "State Machine Example");
 
-    while (!WindowShouldClose())
-    {
-        if (checkCircleCollision(circle1, circle2)) {
-            circle1.color = GREEN;
+    // Initialize game state
+    GameState currentState = TITLE_SCREEN;
+    float stateTimer = 0.0f;
+    bool gamePaused = false;
+
+    // Game objects
+    Rectangle player = { screenWidth / 2 - 25, screenHeight / 2 - 25, 50, 50 };
+    Rectangle obstacle = { screenWidth / 2 + 100, screenHeight / 2 - 25, 50, 50 };
+
+    SetTargetFPS(60);
+
+    while (!WindowShouldClose()) {
+        // Update
+        float deltaTime = GetFrameTime();
+
+        switch (currentState) {
+        case TITLE_SCREEN:
+            stateTimer += deltaTime;
+            if (stateTimer >= 4.0f) {
+                currentState = MAIN_MENU;
+                stateTimer = 0.0f;
+            }
+            break;
+
+        case MAIN_MENU:
+            if (IsKeyPressed(KEY_C)) {
+                currentState = CREDITS_SCREEN;
+            }
+            else if (IsKeyPressed(KEY_G)) {
+                currentState = GAME_SCREEN;
+            }
+            break;
+
+        case CREDITS_SCREEN:
+            if (IsKeyPressed(KEY_ESCAPE)) {
+                currentState = MAIN_MENU;
+            }
+            break;
+
+        case GAME_SCREEN:
+            if (!gamePaused) {
+                // Game logic
+                if (IsKeyDown(KEY_W)) player.y -= 200 * deltaTime;
+                if (IsKeyDown(KEY_S)) player.y += 200 * deltaTime;
+                if (IsKeyDown(KEY_A)) player.x -= 200 * deltaTime;
+                if (IsKeyDown(KEY_D)) player.x += 200 * deltaTime;
+
+                // Collision check
+                if (CheckCollisionRecs(player, obstacle)) {
+                    currentState = LOSE_SCREEN;
+                }
+
+                stateTimer += deltaTime;
+                if (stateTimer >= 20.0f) {
+                    currentState = WIN_SCREEN;
+                    stateTimer = 0.0f;
+                }
+            }
+
+            if (IsKeyPressed(KEY_P)) {
+                currentState = PAUSE_SCREEN;
+                gamePaused = true;
+            }
+            break;
+
+        case PAUSE_SCREEN:
+            if (IsKeyPressed(KEY_ESCAPE)) {
+                currentState = GAME_SCREEN;
+                gamePaused = false;
+            }
+            break;
+
+        case WIN_SCREEN:
+            if (IsKeyPressed(KEY_SPACE)) {
+                currentState = MAIN_MENU;
+            }
+            break;
+
+        case LOSE_SCREEN:
+            if (IsKeyPressed(KEY_SPACE)) {
+                currentState = MAIN_MENU;
+            }
+            break;
         }
-        else {
-            circle1.color = RED;
-        }
+
+        // Draw
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        DrawText("Collision Detection.", 16, 9, 16, RED);
-        DrawCircle(circle1.x, circle1.y, circle1.radius, circle1.color);
-        DrawCircle(circle2.x, circle2.y, circle2.radius, circle2.color);
+
+        switch (currentState) {
+        case TITLE_SCREEN:
+            DrawText("Title Screen", 10, 10, 20, YELLOW);
+            break;
+
+        case MAIN_MENU:
+            DrawText("Main Menu", 10, 10, 20, PURPLE);
+            break;
+
+        case CREDITS_SCREEN:
+            DrawText("Credits Screen", 10, 10, 20, PINK);
+            break;
+
+        case GAME_SCREEN:
+            DrawText("Game Screen", 10, 10, 20, BLUE);
+            DrawRectangleRec(player, WHITE);
+            DrawRectangleRec(obstacle, RED);
+            break;
+
+        case PAUSE_SCREEN:
+            DrawText("Pause Screen", 10, 10, 20, GRAY);
+            DrawText("Game Paused", screenWidth / 2 - MeasureText("Game Paused", 40) / 2, screenHeight / 2 - 40, 40, DARKGRAY);
+            break;
+
+        case WIN_SCREEN:
+            DrawText("Win Screen", 10, 10, 20, GREEN);
+            break;
+
+        case LOSE_SCREEN:
+            DrawText("Lose Screen", 10, 10, 20, RED);
+            break;
+        }
 
         EndDrawing();
-        
     }
 
     CloseWindow();
+
     return 0;
 }
