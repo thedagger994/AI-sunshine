@@ -110,6 +110,37 @@ private:
                 gamePaused = false;
             }
             break;
+
+        case WIN_SCREEN:
+            if (IsKeyPressed(KEY_SPACE)) {
+                currentState = MAIN_MENU;
+            }
+            break;
+
+        case LOSE_SCREEN:
+            if (IsKeyPressed(KEY_SPACE)) {
+                currentState = MAIN_MENU;
+            }
+            break;
+        }
+    }
+
+    void Draw() {
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+        switch (currentState) {
+        case TITLE_SCREEN:
+            DrawText("Title Screen", 10, 10, 20, YELLOW);
+            break;
+
+        case MAIN_MENU:
+            DrawText("Main Menu", 10, 10, 20, PURPLE);
+            break;
+
+        case CREDITS_SCREEN:
+            DrawText("Credits Screen", 10, 10, 20, PINK);
+            break;
+
         }
     }
 }
