@@ -50,8 +50,8 @@ struct Agent : public Rigidbody
 	Color tint = WHITE;
 
 	//Stats -- determine its capabilities
-	float speedMax = 300; // maximum linear velocity of this agent
-	float accelMax = 800; // maximum linear acceleration of this agent
+	float speedMax = 500; // maximum linear velocity of this agent
+	float accelMax = 1200; // maximum linear acceleration of this agent
 
 	void Draw()
 	{

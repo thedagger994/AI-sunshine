@@ -9,6 +9,7 @@
 //	else return vec;
 //}
 //
+// 
 //void Seek(Vector2 agentPosition, Vector2 agentVelocity, Vector2 targetPosition, float desiredSpeed, float acceleration)
 //{
 //	Vector2 desiredVelocity = Normalize(targetPosition - agentPosition) * desiredSpeed;
