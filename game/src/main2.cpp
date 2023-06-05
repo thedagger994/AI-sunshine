@@ -1,4 +1,4 @@
-#include "rlImGui.h"
+/*#include "rlImGui.h"
 #include "Math.h" 
 #include <vector>
 // When using #include, the default location during compile-time is to start from 
@@ -171,4 +171,4 @@ int main(void)
 	rlImGuiShutdown();
 	CloseWindow();
 	return 0;
-}
+}*/
