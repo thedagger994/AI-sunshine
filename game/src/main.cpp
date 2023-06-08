@@ -36,7 +36,12 @@ int main(void)
         {
             rlImGuiBegin();
             {
-               map.GenerateFromImage(noise, )
+                rlImGuiImageButton("Generate Image", )
+                {
+                    map.GenerateFromImage(noise, )
+
+                }
+               
             }
             rlImGuiEnd();
         }
