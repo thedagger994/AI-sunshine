@@ -28,16 +28,15 @@ int main(void)
         ClearBackground(RAYWHITE);
 
         map.Draw();
-
         
         
-        if (IsKeyPressed(KEY_GRAVE)) useGUI = !useGUI;
+        
+        if (IsKeyPressed(ImGuiKey_GraveAccent)) useGUI = !useGUI;
         if (useGUI)
         {
             rlImGuiBegin();
-            rlImGuiImageButton("Generate Map", noise)
             {
-
+               map.GenerateFromImage(noise, )
             }
             rlImGuiEnd();
         }
