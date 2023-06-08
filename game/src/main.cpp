@@ -5,6 +5,7 @@
 #define SCREEN_HEIGHT 720
 
 Tilemap map;
+Image noise;
 
 int main(void)
 {
@@ -13,7 +14,7 @@ int main(void)
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Sunshine");
     rlImGuiSetup(true);
-    InitAudioDevice();
+    noise = LoadImage("../game/assets/textures/perlin-noise.png");
 
     
     bool useGUI = false;
@@ -28,11 +29,16 @@ int main(void)
 
         map.Draw();
 
+        
+        
         if (IsKeyPressed(KEY_GRAVE)) useGUI = !useGUI;
         if (useGUI)
         {
             rlImGuiBegin();
+            rlImGuiImageButton("Generate Map", noise)
+            {
 
+            }
             rlImGuiEnd();
         }
         

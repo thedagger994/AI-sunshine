@@ -21,6 +21,7 @@ public:
 	float tilesizeY = 32;
 	Color tileColors[(int)Tile::Count];
 
+
 	Tile tiles[MAP_WIDTH][MAP_HEIGHT];
 	
 	Vector2 GetScreenPositionOfTile(TileCoord coordinate)
@@ -37,6 +38,25 @@ public:
 		tileColors[(int)Tile::Wall] = GRAY;
 	}
 
+	void GenerateFromImage(Image image, int waterThreshold, int mountainThreshold)
+	{
+		for (int x = 0; x < MAP_WIDTH; x++)
+		{
+			for (int y = 0; y < MAP_HEIGHT; y++)
+			{
+				float u = x / (float)MAP_WIDTH;
+				float v = y / (float)MAP_HEIGHT;
+				tiles[x][y] = (Tile)(rand() % (int)Tile::Water);
+				Color color = GetImageColor(image, u*image.width, v*image.height);
+
+				Tile tile = Tile::Water;
+				if (color.r > waterThreshold) tile = Tile::Water;
+				if (color.r > mountainThreshold) tile = Tile::Wall;
+				tiles[x][y] = tile;
+			}
+		}
+	}
+
 	void Randomize()
 	{
 		for (int x = 0; x < MAP_WIDTH; x++)
@@ -47,6 +67,7 @@ public:
 			}
 		}
 	}
+
 
 	void PerlinNoise()
 	{
