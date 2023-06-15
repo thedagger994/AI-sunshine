@@ -26,6 +26,7 @@ Vector2 Seek(const Vector2& agentPosition, const Vector2& agentVelocity, const V
 	Vector2 deltaV = desiredVelocity - agentVelocity; // Determine the change in velocity we need to achieve the desired velocity
 	Vector2 outputAcceleration = Normalize(deltaV) * acceleration; // Create an acceleration vector in the direction of the desired change in velociity
 	return outputAcceleration;
+
 }
 
 //Physics state -- used in physics update
