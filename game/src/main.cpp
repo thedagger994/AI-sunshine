@@ -1,5 +1,6 @@
 #include "rlImGui.h"
 #include "Tilemap.h"
+#include "TileCoord.h"
 #include <time.h>
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
@@ -34,16 +35,12 @@ int main(void)
         if (IsKeyPressed(ImGuiKey_GraveAccent)) useGUI = !useGUI;
         if (useGUI)
         {
-            rlImGuiBegin();
-            {
-                rlImGuiImageButton("Generate Image", )
-                {
-                    map.GenerateFromImage(noise, )
+            Tilemap tilemap;
 
-                }
-               
-            }
-            rlImGuiEnd();
+            TileCoord startTile = { 0, 0 };
+            TileCoord goalTile = { 10, 10 };
+
+            std::vector<TileCoord> shortestPath = tilemap.Dijkstra(startTile, goalTile);
         }
         
         DrawFPS(10, 10);

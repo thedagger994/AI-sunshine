@@ -1,5 +1,5 @@
 #pragma once
-#include <functional>
+#include <algorithm>
 #include "Math.h"
 
 struct TileCoord
