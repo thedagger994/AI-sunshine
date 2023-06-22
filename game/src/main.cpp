@@ -1,15 +1,17 @@
 #include "rlImGui.h"
+
 #include "Tilemap.h"
 #include "TileCoord.h"
 #include <time.h>
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
+int randChance = 50;
 
 Tilemap map;
 Image noise;
-
 int main(void)
 {
+
     srand(time(NULL));
     map.Randomize();
 
@@ -23,28 +25,34 @@ int main(void)
     while (!WindowShouldClose())
     {     
 
-
-
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
         map.Draw();
-        
-        
-        
-        if (IsKeyPressed(ImGuiKey_GraveAccent)) useGUI = !useGUI;
+
         if (useGUI)
         {
-            Tilemap tilemap;
+              ImGui::Begin("Dijkstra's Algorithm Debug");
 
-            TileCoord startTile = { 0, 0 };
-            TileCoord goalTile = { 10, 10 };
+              ImGui::ShowDemoWindow();
 
-            std::vector<TileCoord> shortestPath = tilemap.Dijkstra(startTile, goalTile);
+              if (ImGui::Button("Randomize map"))
+              {
+                  map.RandomizeArea();
+              }
+              if (ImGui::SliderInt("Wall Chance", &(randChance), 0, 100))
+              
+
+              ImGui::End();
+              ImGui::Render();
+           
         }
+        TileCoord startTile = { 0, 0 };
+        TileCoord goalTile = { 10, 10 };
+        std::vector<TileCoord> shortestPath = map.Dijkstra(startTile, goalTile);
+
         
         DrawFPS(10, 10);
-        DrawText("Press ~ to open/close GUI", 10, 30, 20, GRAY);
         EndDrawing();
     }
 

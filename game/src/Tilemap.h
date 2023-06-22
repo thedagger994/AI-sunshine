@@ -74,19 +74,26 @@ public:
 		{
 			for (int y = 0; y < MAP_HEIGHT; y++)
 			{
+
 				tiles[x][y] = (Tile)(rand() % (int)Tile::Count);
 			}
 		}
 	}
 
-	void RandomizeArea()
+	void RandomizeArea(int randChance = 50)
 	{
 		for (int x = 0; x < MAP_WIDTH; x++)
 		{
 			for (int y = 0; y < MAP_HEIGHT; y++)
 			{
-				tiles[x][y] = (Tile::Count);
+				tiles[x][y] = (Tile::Floor);
+
+				if ((rand() % 101) < randChance)
+				{
+					tiles[x][y] = (Tile::Wall);
+				}
 			}
+			
 		}
 	}
 	
@@ -116,8 +123,8 @@ public:
 		{
 			Tile tile = tiles[tilePosition.x][tilePosition.y];
 			// Implement your own logic to determine if the tile is traversable
-			// For example, check if it's not a wall or a restricted tile
-			return tile != Tile::Wall && tile != Tile::Wall;
+
+			return tile != Tile::Wall;
 		}
 		return false;
 	}
@@ -148,20 +155,20 @@ public:
 		return adjacentTiles;
 	}
 
-int GetCostForTile(Tile tile)
-{
-    // Define the cost for each tile type
-    switch (tile)
-    {
-        case Tile::Floor:
-            return 1;  // Cost for a floor tile
-        case Tile::Wall:
-            return -1; // Cost for a wall tile
-        default:
-            return 0;  // Default cost for unknown tile types
-    }
-}
-
+	int GetCostForTile(Tile tile)
+	{
+	    // Define the cost for each tile type
+	    switch (tile)
+	    {
+	        case Tile::Floor:
+	            return 1;  // Cost for a floor tile
+	        case Tile::Wall:
+	            return -1; // Cost for a wall tile
+	        default:
+	            return 0;  // Default cost for unknown tile types
+	    }
+	}
+	
 	std::vector<TileCoord> Dijkstra(TileCoord start, TileCoord goal)
 	{
 		std::priority_queue<Node> pq;
@@ -172,9 +179,9 @@ int GetCostForTile(Tile tile)
 		pq.push({ start, 0 });
 		distance[start.y * MAP_WIDTH + start.x] = 0;
 
+		Node current = pq.top();
 		while (!pq.empty())
 		{
-			Node current = pq.top();
 			pq.pop();
 
 			if (current.position == goal)
@@ -195,7 +202,7 @@ int GetCostForTile(Tile tile)
 				}
 			}
 		}
-
+		if (current.position == goal)
 		// Reconstruct path from goal to start
 		TileCoord current = goal;
 		while (current != start)
@@ -203,8 +210,8 @@ int GetCostForTile(Tile tile)
 			path.push_back(current);
 			current = previous[current.y * MAP_WIDTH + current.x];
 		}
-		path.push_back(start);
 
+		path.push_back(start);
 		std::reverse(path.begin(), path.end());
 
 		return path;
